@@ -4,14 +4,20 @@ import os
 import uvicorn
 
 app = FastAPI()
+converter = None
 
 @app.get('/hello')
 def say_hello():
     return "Hello World"
 
+
 @app.get('/get-structured-data')
 def get_structured_data(source: str):
-    converter = DocumentConverter()
+    global converter
+    if converter is None:
+        print("Initializing DocumentConverter")
+        converter = DocumentConverter()
+        
     result = converter.convert(source)
 
     return result.document.export_to_markdown()
