@@ -1,5 +1,4 @@
 from fastapi import FastAPI, Request
-from docling.document_converter import DocumentConverter
 import os
 import uvicorn
 
@@ -16,6 +15,7 @@ def get_structured_data(source: str):
     global converter
     if converter is None:
         print("Initializing DocumentConverter")
+        from docling.document_converter import DocumentConverter
         converter = DocumentConverter()
         
     result = converter.convert(source)
