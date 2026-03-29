@@ -18,6 +18,14 @@ COPY --chown=user ./requirements.txt $HOME/app/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r $HOME/app/requirements.txt
 
+# Pre-download tokenizers and layout models to bake them into the Docker image
+RUN python -c "\
+import warnings; warnings.filterwarnings('ignore'); \
+from transformers import AutoTokenizer; \
+AutoTokenizer.from_pretrained('nvidia/llama-nemotron-embed-vl-1b-v2'); \
+from docling.document_converter import DocumentConverter; \
+DocumentConverter()"
+
 COPY --chown=user . $HOME/app
 
 EXPOSE 7860
